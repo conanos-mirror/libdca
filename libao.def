@@ -1,0 +1,12 @@
+LIBRARY    libao.dll
+EXPORTS
+ao_drivers
+convert2s16_1
+convert2s16_2
+convert2s16_3
+convert2s16_4
+convert2s16_5
+channels_multi
+convert2s16_multi
+s16_swap
+s32_swap
