@@ -71,6 +71,22 @@ class LibdcaConan(ConanFile):
             self.copy("audio_out.h", dst=os.path.join(self.package_folder,"include"),
                       src=os.path.join(self.build_folder,self._source_subfolder,"include"))
 
+            tools.mkdir(os.path.join(self.package_folder,"lib","pkgconfig"))
+            shutil.copy(os.path.join(self.build_folder,self._source_subfolder,"libdca","libdca.pc.in"),
+                        os.path.join(self.package_folder,"lib","pkgconfig","libdca.pc"))
+            lib = "-lassd" if self.options.shared else "-lass"
+            replacements = {
+                "@prefix@"          : self.package_folder,
+                "@exec_prefix@"     : "${prefix}/lib",
+                "@libdir@"          : "${prefix}/lib",
+                "@includedir@"      : "${prefix}/include",
+                "@VERSION@"         : self.version,
+                "@LIBDCA_LIBS@"     : "",
+                "@PACKAGE@"         : "",
+            }
+            for s, r in replacements.items():
+                tools.replace_in_file(os.path.join(self.package_folder,"lib","pkgconfig","libdca.pc"),s,r)
+
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
 
